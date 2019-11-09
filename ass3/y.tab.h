@@ -1,0 +1,9 @@
+#define INT 257
+#define CHAR 258
+#define FLOAT 259
+#define ID 260
+#define FNUM 261
+#define INUM 262
+#define STRUCT 263
+#define OB 264
+#define CB 265

@@ -1,0 +1,3 @@
+char MANISH;
+int a;
+a = MANISH;

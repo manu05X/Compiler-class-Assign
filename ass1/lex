@@ -1,0 +1,20 @@
+%{
+#include<stdio.h>
+int count=0;
+%}
+letter [a-z A-Z]
+digit [0-9]
+%%
+{letter}({letter}|{digit})*print("id:%s\n",yytxt);
+\n printf("new line\n");
+	
+%%
+int yywrap()
+{
+return 1;
+}
+main()
+{
+yylex();
+yywrap();
+}

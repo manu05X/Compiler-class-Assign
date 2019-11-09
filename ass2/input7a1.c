@@ -1,0 +1,11 @@
+main()
+{ INT i=0; INT sum=0; INT count;
+read(count);
+for(i=0;i<10;i++)
+{
+read(
+x);
+sum+=x;
+}
+print(sum)
+; }

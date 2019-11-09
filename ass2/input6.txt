@@ -1,0 +1,7 @@
+while((a==b) && (b==c))
+begin
+      a = 4;
+      b = 6;
+      c = a+b;
+end
+

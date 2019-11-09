@@ -1,0 +1,4 @@
+if(a>b) then smile; else cry;
+if(a>b) then 
+	if(b>c)then happy;
+	    else sad;
