@@ -1,0 +1,19 @@
+%{
+    #include<string.h>
+    #define YYSTYPE char*
+    #include "y.tab.h"
+    extern char* yylval;
+    int line=1;
+    
+%}
+
+%%
+for {   return FOR; }
+[a-zA-Z]+[a-zA-Z0-9]* {   yylval=strdup(yytext); return ID; }
+[0-9]+ {  yylval=strdup(yytext); return NUM; }
+==|!=|<=|>=|<|> {  yylval=strdup(yytext); return CO; }
+"&&"|"||" {  yylval=strdup(yytext);  return BO; }
+[\t ] {  }
+\n {  line++; }
+. {    return yytext[0]; }
+%%

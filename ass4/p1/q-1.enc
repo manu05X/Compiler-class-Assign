@@ -1,0 +1,110 @@
+%{
+    #include<stdio.h>
+    #include<stdlib.h>
+    #include<string.h>
+    #define YYSTYPE char*
+    int yylex();
+    int yyerror();
+    char arr[16][20];
+    char struct_arr[16][20];
+    int top=-1;
+    int struct_top=-1;
+    char buffer[200]="", temp[100]="";
+    int sarr[10], earr[100];
+    int index_top=-1;
+    void print_var(char *str)
+    { 
+        if(strcmp(str,"struct")!=0){
+        printf("%s %s",str,arr[0]);
+        }
+        else
+        {
+            printf("struct\n{\n%s} ",buffer);
+            strcpy(buffer,"");
+            printf("%s",arr[0]);
+        }
+        int i=1;
+        if(index_top!=-1)
+        {
+            int j=0;
+            while(index_top>=0)
+            {
+                j=index_top--;
+                int k=earr[j]-sarr[j];
+                printf("[%d]",k);
+                
+            }
+            index_top=-1;
+        }
+        while(top>=i)
+        {
+            printf(", %s",arr[i++]);
+        } 
+        printf(";\n"); 
+        top=-1;
+        
+    }
+    
+
+%}
+%token OB CB INT BEG END REC CHAR ID NUM
+
+%%
+START: S {  return 0;} 
+S: D S  
+| D1 S
+|
+;
+
+
+D: V L ':' T  { print_var($4); }
+
+;
+L: ',' V L 
+|  
+;
+V: ID { strcpy(arr[++top],$1); }
+T: INT TL ';' { strcpy($$,"int"); }
+| CHAR TL ';' { strcpy($$,"char"); }
+| R { strcpy($$,"struct"); }
+;
+TL: ARR
+|
+;
+
+ARR: OB NUM '.' '.' NUM LARR CB { sarr[++index_top]=atoi($2); earr[index_top]=atoi($5); } 
+
+LARR: ',' NUM '.' '.' NUM LARR { sarr[++index_top]=atoi($2); earr[index_top]=atoi($5); } 
+|
+
+;
+
+R:  REC BEG ';' S1 END ';'  
+;
+S1: D1 S1 
+|
+;
+D1:  V1 L1 ':' T {  sprintf(temp,"  %s %s",$4,struct_arr[0]); strcat(buffer,temp); int i=1; while(struct_top>=i){sprintf(temp,", %s",struct_arr[i++]);  strcat(buffer,temp); } strcat(buffer,";\n");   struct_top=-1;}
+;
+V1: ID { strcpy(struct_arr[++struct_top],$1); }
+L1: ',' V1 L1 
+|  
+;
+
+%%
+
+int yywrap()
+{
+    return 1;
+}
+int yyerror(char* err)
+{
+    extern int line;
+    extern char *yytext;
+    printf("Syntax error at line: %d\n %s\n",line, yytext);
+    exit(0);
+}
+int main()
+{
+    yyparse();
+}
